@@ -1,36 +1,48 @@
-/*
-un menu que le de la opcion al usuario de jugar o salir
-al jugar se elije una palabra del diccionario de manera 'aleatoria'
-pedirle al usuario que introduzca un caracter o resuelva
-veririficar si la opcion introducida por el usuario es correcta
-si es correcta ponerla en la solucion y si no dibujar el ahorcado
-si hay mas de 6 errores el juego termina game over
-*/
-
+/***************************************************************
+ *  Nombre del archivo :    main.c
+ *  Autor              :    Jhon Rios
+ *  Fecha de creación  :    2025-05-31
+ *  Última modificación:    2025-05-31
+ * 
+ *  Descripción:
+ *      Funcion principal del juego hangman version 0.1
+ *
+ ***************************************************************/
 #include "hangman.h"
 
 void	ft_play_hangman(void);
 int		ft_random_nbr(int max);
 char	*ft_select_word(char *word);
 char	*ft_fill_str(char *word);
-int	ft_index_pos(char *word, char letter);
+int		ft_index_pos(char *word, char letter);
 
 int	main(void)
 {
 	int	option;
+	int	checker;
 
 	while (1)
 	{
-		printf("Elije una opcion...\n");
-		printf("1) jugar\n");
-		printf("2) salir\n");
-		scanf("%d", &option);
-		if (option == 1)
-			ft_play_hangman();
-		else if (option == 2)
-			break ;
+		printf("\033[1;36mElije una opcion...\033[0m\n");
+		printf("\033[1;36m1) jugar\033[0m\n");
+		printf("\033[1;36m2) salir\033[0m\n");
+		checker = scanf("%d", &option);
+		if (checker == 1)
+		{
+			if (option == 1)
+				ft_play_hangman();
+			else if (option == 2)
+				break ;
+			else
+				printf ("\033[1;31mError!!\033[0m\n");
+		}
 		else
-			printf ("Error!!\n");
+		{
+			printf ("\033[1;31mError!!\033[0m\n");
+			checker = getchar();
+			while (checker != '\n' && checker != EOF)
+				checker = getchar();
+		}
 	}
 	return (0);
 }
@@ -47,9 +59,9 @@ void	ft_play_hangman(void)
 	solution = ft_fill_str(word);
 	while (1)
 	{
-		printf("%s", hangman_stages[error]);
-		printf("\n%s\n", solution);
-		printf("Introduzca una letra: ");
+		printf("\033[1;33m%s\033[0m", hangman_stages[error]);
+		printf("\n\033[1;36m%s\033[0m\n", solution);
+		printf("\033[1;33mIntroduzca una letra: \033[0m");
 		scanf(" %c", &letter);
 		if (strchr(word, letter))
 		{
@@ -63,16 +75,20 @@ void	ft_play_hangman(void)
 			}
 			if (strcmp(word, solution) == 0)
 			{
-				printf("%s", hangman_stages[error]);
-				printf("\n%s\n", solution);
-				printf("Has ganado!!\n");
+				printf("\033[1;33m%s\033[0m", hangman_stages[error]);
+				printf("\n\033[1;36m%s\033[0m\n", solution);
+				printf("\033[1;32mHas ganado!!\033[0m\n");
 				break ;
 			}
 		}
 		else
 			error++;
 		if (error >= 8)
+		{
+			printf("\033[1;31mGAME OVER!!\033[0m\n");
+			printf("\033[1;32mLa palabra era %s\033[0m\n", word);
 			break ;
+		}
 	}
 	free(solution);
 }
@@ -80,11 +96,7 @@ void	ft_play_hangman(void)
 char	*ft_select_word(char *word)
 {
 	int		index;
-	char	*dictionary[] = {"Camuflaje", "Escuela", "Ajedrez",
-							"Gaseoso", "Lima", "Zapote", "Mango",
-							"Halcon", "Cocodrilo", "Eco", "Corazon",
-							"Escuela", "Dedos", "Aspiradora", "Luna"
-							};
+
 	index = ft_random_nbr(sizeof(dictionary)/sizeof(dictionary[0]));
 	word = dictionary[index];
 	return (word);

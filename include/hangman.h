@@ -79,4 +79,13 @@ const char *hangman_stages[] = {
 	" |      / \\\n"
 	"_|___\n"};
 
+	char	*dictionary[] = {"camuflaje", "escuela", "ajedrez",
+							"gaseoso", "lima", "zapote", "mango",
+							"halcon", "cocodrilo", "eco", "corazon",
+							"espuela", "dedos", "aspiradora", "luna",
+							"gato", "perro", "torre", "flor", "estrella",
+							"sol", "poema", "noche", "chutar", "polaco",
+							"rojo", "libertad", "anarquia", "jaguar"
+							};
+
 #endif
