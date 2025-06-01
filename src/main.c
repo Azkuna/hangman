@@ -2,10 +2,10 @@
  *  Nombre del archivo :    main.c
  *  Autor              :    Jhon Rios
  *  Fecha de creación  :    2025-05-31
- *  Última modificación:    2025-05-31
+ *  Última modificación:    2025-06-01
  * 
  *  Descripción:
- *      Funcion principal del juego hangman version 0.1
+ *      Funcion principal del juego hangman version 0.2
  *
  ***************************************************************/
 #include "hangman.h"
@@ -14,7 +14,8 @@ void	ft_play_hangman(void);
 int		ft_random_nbr(int max);
 char	*ft_select_word(char *word);
 char	*ft_fill_str(char *word);
-int		ft_index_pos(char *word, char letter);
+char	*ft_char_word(char *word, char *solution, char letter);
+char	*ft_update_use(char *use, char letter, int *index);
 
 int	main(void)
 {
@@ -53,28 +54,26 @@ void	ft_play_hangman(void)
 	int		error = 0;
 	char	*solution;
 	char	letter;
-	int		index;
+	int		index = 0;
+	char	alphat[25] = {0};
 
 	word = ft_select_word(word);
 	solution = ft_fill_str(word);
 	while (1)
 	{
+		printf("\033[H\033[J");
 		printf("\033[1;33m%s\033[0m", hangman_stages[error]);
-		printf("\n\033[1;36m%s\033[0m\n", solution);
+		printf("\n\033[1;36m%s\033[0m		", solution);
+		printf("\033[1;36m%s\033[0m\n", alphat);
 		printf("\033[1;33mIntroduzca una letra: \033[0m");
 		scanf(" %c", &letter);
 		if (strchr(word, letter))
 		{
-			index = ft_index_pos(word, letter);
-			solution[index] = letter;
-			while (( index >= 0 && index + 1 < (int)strlen(word)) && (strchr(word + index, letter)))
-			{
-				index += ft_index_pos(word + index + 1, letter) + 1;
-				if (index < (int)strlen(solution))
-					solution[index] = letter;
-			}
+			ft_char_word(word, solution, letter);
+			ft_update_use(alphat, letter, &index);
 			if (strcmp(word, solution) == 0)
 			{
+				printf("\033[H\033[J");
 				printf("\033[1;33m%s\033[0m", hangman_stages[error]);
 				printf("\n\033[1;36m%s\033[0m\n", solution);
 				printf("\033[1;32mHas ganado!!\033[0m\n");
@@ -82,9 +81,13 @@ void	ft_play_hangman(void)
 			}
 		}
 		else
+		{
 			error++;
+			ft_update_use(alphat, letter, &index);
+		}
 		if (error >= 8)
 		{
+			printf("\033[H\033[J");
 			printf("\033[1;31mGAME OVER!!\033[0m\n");
 			printf("\033[1;32mLa palabra era %s\033[0m\n", word);
 			break ;
@@ -128,7 +131,23 @@ char	*ft_fill_str(char *word)
 	return (result);
 }
 
-int	ft_index_pos(char *word, char letter)
+char	*ft_char_word(char *word, char *solution, char letter)
 {
-	return (strchr(word, letter) - word);
+	int	index;
+
+	index = 0;
+	while (word[index])
+	{
+		if (word[index] == letter)
+			solution[index] = letter;
+		index++;
+	}
+	return (solution);
+}
+
+char	*ft_update_use(char *use, char letter, int *index)
+{
+	if (!strchr(use, letter))
+		use[(*index)++] = letter;
+	return (use);
 }
