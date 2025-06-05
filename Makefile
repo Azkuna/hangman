@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror -Iinclude
-SRC = src/main.c
+SRC = src/main.c src/hangman.c
 OBJ = $(SRC:.c=.o)
 EXEC = hangman
 
