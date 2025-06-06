@@ -56,6 +56,8 @@ void	ft_play_hangman(void)
 			break ;
 		}
 	}
+	while (letter != '\n' && letter != EOF)
+		letter = getchar();
 	free(solution);
 }
 

@@ -11,28 +11,34 @@
 
 #include <stdio.h>
 #include <unistd.h>
+#include <stdlib.h>
 
 void	ft_play_hangman(void);
 
 int	main(void)
 {
-	int	option;
-	int	checker;
+	char	option;
+	int		checker;
 
 	while (1)
 	{
 		printf("\033[1;36mElije una opcion...\033[0m\n");
 		printf("\033[1;36m1) jugar\033[0m\n");
 		printf("\033[1;36m2) salir\033[0m\n");
-		checker = scanf("%d", &option);
+		checker = scanf("%c", &option);
 		if (checker == 1)
 		{
-			if (option == 1)
+			if (option == '1')
 				ft_play_hangman();
-			else if (option == 2)
+			else if (option == '2')
 				break ;
 			else
+			{
 				printf ("\033[1;31mError!!\033[0m\n");
+				checker = getchar();
+				while (checker != '\n' && checker != EOF)
+					checker = getchar();
+			}
 		}
 		else
 		{
